@@ -1,0 +1,208 @@
+---------------------------------------------------
+-- AADL2.1
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+PACKAGE interfaceview::IV::vizkit3d_BodyState
+PUBLIC
+
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_updateBodyState
+FEATURES
+  bodystate : IN PARAMETER DataView::Base_samples_BodyState {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_updateBodyState;
+
+SUBPROGRAM IMPLEMENTATION PI_updateBodyState.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 0 ms;
+END PI_updateBodyState.others;
+
+SYSTEM vizkit3d_BodyState
+FEATURES
+  PI_updateBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::vizkit3d_BodyState::PI_updateBodyState.others {
+    Taste::coordinates => "195270 108562";
+    Taste::RCMoperationKind => unprotected;
+    Taste::RCMperiod => 0 ms;
+    Taste::Deadline => 0 ms;
+    Taste::InterfaceName => "updateBodyState";
+  };
+PROPERTIES
+  Source_Language => (C);
+  Taste::Active_Interfaces => enabled;
+  Source_Text => ("/root/esrocos_workspace/install/share/taste_components/vizkit3d_bodystate_widgets/vizkit3d_bodystate.zip");
+END vizkit3d_BodyState;
+
+SYSTEM IMPLEMENTATION vizkit3d_BodyState.others
+SUBCOMPONENTS
+  configFile : DATA DataView::Vizkit3D_FilePath {
+    Taste::FS_Default_Value => """config-bodystate.yml""";
+  };
+  id : DATA DataView::Vizkit3D_PluginLabel {
+    Taste::FS_Default_Value => """BS""";
+  };
+  compilerOption : DATA DataView::Taste_directive {
+    Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux""";
+  };
+END vizkit3d_BodyState.others;
+
+END interfaceview::IV::vizkit3d_BodyState;
+
+PACKAGE interfaceview::IV::kb_teleop
+PUBLIC
+
+WITH interfaceview::IV::odometry;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_clock
+PROPERTIES
+  Taste::Associated_Queue_Size => 1;
+END PI_clock;
+
+SUBPROGRAM IMPLEMENTATION PI_clock.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 15 ms;
+END PI_clock.others;
+
+SUBPROGRAM RI_consume_mc
+FEATURES
+  in_mc : IN PARAMETER DataView::Base_commands_Motion2D {
+    Taste::encoding => NATIVE;
+  };
+END RI_consume_mc;
+
+SUBPROGRAM IMPLEMENTATION RI_consume_mc.others
+END RI_consume_mc.others;
+
+SYSTEM kb_teleop
+FEATURES
+  PI_clock : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::kb_teleop::PI_clock.others {
+    Taste::coordinates => "20008 68919";
+    Taste::RCMoperationKind => cyclic;
+    Taste::RCMperiod => 10 ms;
+    Taste::Deadline => 10 ms;
+    Taste::InterfaceName => "clock";
+  };
+  RI_consume_mc : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::odometry::PI_mc_in.others {
+    Taste::coordinates => "59577 87444";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "consume_mc";
+    Taste::labelInheritance => "false";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+  Source_Text => ("/root/esrocos_workspace/install/plex/kb_teleop/kb_teleop.zip");
+END kb_teleop;
+
+SYSTEM IMPLEMENTATION kb_teleop.others
+END kb_teleop.others;
+
+END interfaceview::IV::kb_teleop;
+
+PACKAGE interfaceview::IV::odometry
+PUBLIC
+
+WITH interfaceview::IV::vizkit3d_BodyState;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SUBPROGRAM PI_mc_in
+FEATURES
+  in_mc : IN PARAMETER DataView::Base_commands_Motion2D {
+    Taste::encoding => NATIVE;
+  };
+PROPERTIES
+  Taste::Associated_Queue_Size => 100;
+END PI_mc_in;
+
+SUBPROGRAM IMPLEMENTATION PI_mc_in.others
+PROPERTIES
+  Compute_Execution_Time => 0 ms .. 100 ms;
+END PI_mc_in.others;
+
+SUBPROGRAM RI_updateBodyState
+FEATURES
+  bodystate : IN PARAMETER DataView::Base_samples_BodyState {
+    Taste::encoding => NATIVE;
+  };
+END RI_updateBodyState;
+
+SUBPROGRAM IMPLEMENTATION RI_updateBodyState.others
+END RI_updateBodyState.others;
+
+SYSTEM odometry
+FEATURES
+  PI_mc_in : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::odometry::PI_mc_in.others {
+    Taste::coordinates => "97079 87444";
+    Taste::RCMoperationKind => sporadic;
+    Taste::RCMperiod => 100 ms;
+    Taste::Deadline => 100 ms;
+    Taste::InterfaceName => "mc_in";
+  };
+  RI_updateBodyState : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::vizkit3d_BodyState::PI_updateBodyState.others {
+    Taste::coordinates => "163405 91149";
+    Taste::RCMoperationKind => any;
+    Taste::InterfaceName => "updateBodyState";
+    Taste::labelInheritance => "true";
+  };
+PROPERTIES
+  Source_Language => (CPP);
+  Taste::Active_Interfaces => any;
+END odometry;
+
+SYSTEM IMPLEMENTATION odometry.others
+END odometry.others;
+
+END interfaceview::IV::odometry;
+
+PACKAGE interfaceview::IV
+PUBLIC
+
+WITH interfaceview::IV::vizkit3d_BodyState;
+WITH interfaceview::IV::kb_teleop;
+WITH interfaceview::IV::odometry;
+WITH Taste;
+WITH DataView;
+WITH TASTE_IV_Properties;
+SYSTEM interfaceview
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("viz_test_dv.aadl");
+END interfaceview;
+
+SYSTEM IMPLEMENTATION interfaceview.others
+SUBCOMPONENTS
+  vizkit3d_BodyState : SYSTEM interfaceview::IV::vizkit3d_BodyState::vizkit3d_BodyState.others {
+    Taste::coordinates => "195270 67807 284939 123387";
+  };
+  kb_teleop : SYSTEM interfaceview::IV::kb_teleop::kb_teleop.others {
+    Taste::coordinates => "8893 68919 59577 134874";
+  };
+  odometry : SYSTEM interfaceview::IV::odometry::odometry.others {
+    Taste::coordinates => "97079 72624 163405 140802";
+  };
+CONNECTIONS
+  vizkit3d_BodyState_PI_updateBodyState_odometry_RI_updateBodyState : SUBPROGRAM ACCESS vizkit3d_BodyState.PI_updateBodyState -> odometry.RI_updateBodyState {
+    Taste::coordinates => "163405 91149 179337 91149 179337 108562 195270 108562";
+  };
+  odometry_PI_mc_in_kb_teleop_RI_consume_mc : SUBPROGRAM ACCESS odometry.PI_mc_in -> kb_teleop.RI_consume_mc {
+    Taste::coordinates => "59577 87444 79810 87444 79810 87444 97079 87444";
+  };
+END interfaceview.others;
+
+PROPERTIES
+  Taste::dataView => ("DataView");
+  Taste::dataViewPath => ("viz_test_dv.aadl");
+  Taste::coordinates => "0 0 297000 210000";
+  Taste::version => "2.0";
+END interfaceview::IV;
+

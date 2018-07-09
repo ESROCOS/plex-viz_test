@@ -1,0 +1,7 @@
+ASNACN_DIR: dataview/
+PROJECT_NAME: viz_test
+deps:
+- types/base: ''
+- types/base_support: ''
+- gui/vizkit3d_taste: ''
+- plex/teleops: ''
