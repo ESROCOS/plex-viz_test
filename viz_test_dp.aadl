@@ -22,9 +22,9 @@ END deploymentview::DV::Node1;
 PACKAGE deploymentview::DV
 PUBLIC
 
-WITH interfaceview::IV::vizkit3d_BodyState;
 WITH interfaceview::IV::kb_teleop;
 WITH interfaceview::IV::odometry;
+WITH interfaceview::IV::vizkit3d_BodyState;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::Node1;
 WITH Taste;
@@ -36,14 +36,14 @@ END Node1;
 
 SYSTEM IMPLEMENTATION Node1.others
 SUBCOMPONENTS
-  IV_vizkit3d_BodyState : SYSTEM interfaceview::IV::vizkit3d_BodyState::vizkit3d_BodyState.others {
-    Taste::FunctionName => "vizkit3d_BodyState";
-  };
   IV_kb_teleop : SYSTEM interfaceview::IV::kb_teleop::kb_teleop.others {
     Taste::FunctionName => "kb_teleop";
   };
   IV_odometry : SYSTEM interfaceview::IV::odometry::odometry.others {
     Taste::FunctionName => "odometry";
+  };
+  IV_vizkit3d_BodyState : SYSTEM interfaceview::IV::vizkit3d_BodyState::vizkit3d_BodyState.others {
+    Taste::FunctionName => "vizkit3d_BodyState";
   };
   x86_partition : PROCESS deploymentview::DV::Node1::x86_partition.others {
     Taste::coordinates => "70182 91181 201938 162118";
@@ -53,9 +53,9 @@ SUBCOMPONENTS
     Taste::coordinates => "53712 70913 218407 172252";
   };
 PROPERTIES
-  Taste::APLC_Binding => (reference (x86_partition)) APPLIES TO IV_vizkit3d_BodyState;
   Taste::APLC_Binding => (reference (x86_partition)) APPLIES TO IV_kb_teleop;
   Taste::APLC_Binding => (reference (x86_partition)) APPLIES TO IV_odometry;
+  Taste::APLC_Binding => (reference (x86_partition)) APPLIES TO IV_vizkit3d_BodyState;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO x86_partition;
 END Node1.others;
 

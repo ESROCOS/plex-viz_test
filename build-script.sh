@@ -107,9 +107,9 @@ cd "$CWD" && assert-builder-ocarina.py \
 	--interfaceView "$INTERFACEVIEW" \
 	--deploymentView "$DEPLOYMENTVIEW" \
 	-o "$OUTPUTDIR" \
-	--subC vizkit3d_bodystate:/root/esrocos_workspace/install/share/taste_components/vizkit3d_bodystate_widgets/vizkit3d_bodystate.zip \
-	--subCPP kb_teleop:/root/esrocos_workspace/install/plex/kb_teleop/plex/kb_teleop/kb_teleop.zip \
+	--subCPP kb_teleop:/root/esrocos_workspace/install/plex/kb_teleop/kb_teleop.zip \
 	--subCPP odometry:"$SKELS"/odometry.zip \
+	--subCPP vizkit3d_bodystate:/root/esrocos_workspace/install/share/taste_components/vizkit3d_bodystate_widgets/vizkit3d_bodystate.zip \
 	$ORCHESTRATOR_OPTIONS
 
 if [ -f user_init_last.sh ]
