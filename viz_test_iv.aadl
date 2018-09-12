@@ -22,15 +22,15 @@ PROPERTIES
   Compute_Execution_Time => 0 ms .. 15 ms;
 END PI_clock.others;
 
-SUBPROGRAM RI_consume_mc
+SUBPROGRAM RI_mc_out
 FEATURES
   in_mc : IN PARAMETER DataView::Base_commands_Motion2D {
     Taste::encoding => NATIVE;
   };
-END RI_consume_mc;
+END RI_mc_out;
 
-SUBPROGRAM IMPLEMENTATION RI_consume_mc.others
-END RI_consume_mc.others;
+SUBPROGRAM IMPLEMENTATION RI_mc_out.others
+END RI_mc_out.others;
 
 SYSTEM kb_teleop
 FEATURES
@@ -41,16 +41,16 @@ FEATURES
     Taste::Deadline => 10 ms;
     Taste::InterfaceName => "clock";
   };
-  RI_consume_mc : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::odometry::PI_mc_in.others {
+  RI_mc_out : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::odometry::PI_mc_in.others {
     Taste::coordinates => "59577 87444";
     Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "consume_mc";
+    Taste::InterfaceName => "mc_out";
     Taste::labelInheritance => "false";
   };
 PROPERTIES
   Source_Language => (CPP);
   Taste::Active_Interfaces => any;
-  Source_Text => ("/root/esrocos_workspace/install/plex/kb_teleop/kb_teleop.zip");
+  Source_Text => ("/root/esrocos_workspace/install/share/taste_components/plex_teleops/kb_teleop.zip");
 END kb_teleop;
 
 SYSTEM IMPLEMENTATION kb_teleop.others
@@ -195,7 +195,7 @@ SUBCOMPONENTS
     Taste::coordinates => "201763 53784 287000 95215";
   };
 CONNECTIONS
-  odometry_PI_mc_in_kb_teleop_RI_consume_mc : SUBPROGRAM ACCESS odometry.PI_mc_in -> kb_teleop.RI_consume_mc {
+  odometry_PI_mc_in_kb_teleop_RI_mc_out : SUBPROGRAM ACCESS odometry.PI_mc_in -> kb_teleop.RI_mc_out {
     Taste::coordinates => "59577 87444 79810 87444 79810 87444 97079 87444";
   };
   vizkit3d_BodyState_PI_updateBodyState_odometry_RI_updateBodyState : SUBPROGRAM ACCESS vizkit3d_BodyState.PI_updateBodyState -> odometry.RI_updateBodyState {
