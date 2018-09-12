@@ -4,4 +4,5 @@ deps:
 - types/base: ''
 - types/base_support: ''
 - gui/vizkit3d_taste: ''
+- types/vizkit3d:
 - plex/teleops: ''

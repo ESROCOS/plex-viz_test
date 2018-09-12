@@ -5,36 +5,94 @@
 -- generated code: do not edit
 ---------------------------------------------------
 
-PACKAGE deploymentview::DV::Node1
+PACKAGE deploymentview::DV::remote_control_pc
 PUBLIC
 
+WITH ocarina_buses;
+WITH ocarina_drivers;
 WITH Taste;
 WITH Deployment;
 WITH TASTE_DV_Properties;
-PROCESS x86_partition
-END x86_partition;
+PROCESS remote_control
+END remote_control;
 
-PROCESS IMPLEMENTATION x86_partition.others
-END x86_partition.others;
+PROCESS IMPLEMENTATION remote_control.others
+END remote_control.others;
 
-END deploymentview::DV::Node1;
+DEVICE generic_sockets_ip_pohic
+EXTENDS ocarina_drivers::generic_sockets_ip
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::ip.i {
+    Taste::coordinates => "105667 98686";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "115461 131304" APPLIES TO link;
+  Deployment::Help => "Write your ASN.1 configuration here";
+  Deployment::Configuration => "{devname ""enp0s3"", address ""192.168.0.56"", port 5116}";
+  Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
+  Deployment::Version => "0.1beta";
+END generic_sockets_ip_pohic;
+
+DEVICE IMPLEMENTATION generic_sockets_ip_pohic.others
+EXTENDS ocarina_drivers::generic_sockets_ip.pohic
+END generic_sockets_ip_pohic.others;
+
+END deploymentview::DV::remote_control_pc;
+
+PACKAGE deploymentview::DV::cots_linux_obc
+PUBLIC
+
+WITH ocarina_buses;
+WITH ocarina_drivers;
+WITH Taste;
+WITH Deployment;
+WITH TASTE_DV_Properties;
+PROCESS on_board_control
+END on_board_control;
+
+PROCESS IMPLEMENTATION on_board_control.others
+END on_board_control.others;
+
+DEVICE generic_sockets_ip_pohic
+EXTENDS ocarina_drivers::generic_sockets_ip
+FEATURES
+  link : REFINED TO REQUIRES BUS ACCESS ocarina_buses::ip.i {
+    Taste::coordinates => "160310 98108";
+  };
+PROPERTIES
+  Taste::Interface_Coordinates => "160033 118233" APPLIES TO link;
+  Deployment::Help => "Write your ASN.1 configuration here";
+  Deployment::Configuration => "{devname ""enp0s3"", address ""192.168.0.9"", port 5116}";
+  Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
+  Deployment::Version => "0.1beta";
+END generic_sockets_ip_pohic;
+
+DEVICE IMPLEMENTATION generic_sockets_ip_pohic.others
+EXTENDS ocarina_drivers::generic_sockets_ip.pohic
+END generic_sockets_ip_pohic.others;
+
+END deploymentview::DV::cots_linux_obc;
 
 PACKAGE deploymentview::DV
 PUBLIC
 
 WITH interfaceview::IV::kb_teleop;
 WITH interfaceview::IV::odometry;
-WITH interfaceview::IV::vizkit3d_BodyState;
 WITH ocarina_processors_x86;
-WITH deploymentview::DV::Node1;
+WITH deploymentview::DV::remote_control_pc;
+WITH interfaceview::IV::vizkit3d_BodyState;
+WITH deploymentview::DV::cots_linux_obc;
+WITH ocarina_buses;
 WITH Taste;
 WITH Deployment;
 WITH interfaceview::IV;
 WITH TASTE_DV_Properties;
-SYSTEM Node1
-END Node1;
+SYSTEM remote_control_pc
+FEATURES
+  generic_sockets_ip_pohic_ip_i : REQUIRES BUS ACCESS ocarina_buses::ip.i;
+END remote_control_pc;
 
-SYSTEM IMPLEMENTATION Node1.others
+SYSTEM IMPLEMENTATION remote_control_pc.others
 SUBCOMPONENTS
   IV_kb_teleop : SYSTEM interfaceview::IV::kb_teleop::kb_teleop.others {
     Taste::FunctionName => "kb_teleop";
@@ -42,32 +100,75 @@ SUBCOMPONENTS
   IV_odometry : SYSTEM interfaceview::IV::odometry::odometry.others {
     Taste::FunctionName => "odometry";
   };
-  IV_vizkit3d_BodyState : SYSTEM interfaceview::IV::vizkit3d_BodyState::vizkit3d_BodyState.others {
-    Taste::FunctionName => "vizkit3d_BodyState";
-  };
-  x86_partition : PROCESS deploymentview::DV::Node1::x86_partition.others {
-    Taste::coordinates => "70182 91181 201938 162118";
+  remote_control : PROCESS deploymentview::DV::remote_control_pc::remote_control.others {
+    Taste::coordinates => "92815 55170 122143 82255";
     Deployment::Port_Number => 0;
   };
   x86_linux : PROCESSOR ocarina_processors_x86::x86.linux {
-    Taste::coordinates => "53712 70913 218407 172252";
+    Taste::coordinates => "89148 47432 125808 84722";
   };
+  generic_sockets_ip_pohic : DEVICE deploymentview::DV::remote_control_pc::generic_sockets_ip_pohic.others {
+    Taste::coordinates => "89604 87506 123461 98686";
+  };
+CONNECTIONS
+  generic_sockets_ip_pohic_ip_i_link : BUS ACCESS generic_sockets_ip_pohic_ip_i -> generic_sockets_ip_pohic.link;
 PROPERTIES
-  Taste::APLC_Binding => (reference (x86_partition)) APPLIES TO IV_kb_teleop;
-  Taste::APLC_Binding => (reference (x86_partition)) APPLIES TO IV_odometry;
-  Taste::APLC_Binding => (reference (x86_partition)) APPLIES TO IV_vizkit3d_BodyState;
-  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO x86_partition;
-END Node1.others;
+  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_kb_teleop;
+  Taste::APLC_Binding => (reference (remote_control)) APPLIES TO IV_odometry;
+  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO remote_control;
+  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
+END remote_control_pc.others;
+
+SYSTEM cots_linux_obc
+FEATURES
+  generic_sockets_ip_pohic_ip_i : REQUIRES BUS ACCESS ocarina_buses::ip.i;
+END cots_linux_obc;
+
+SYSTEM IMPLEMENTATION cots_linux_obc.others
+SUBCOMPONENTS
+  IV_vizkit3d_BodyState : SYSTEM interfaceview::IV::vizkit3d_BodyState::vizkit3d_BodyState.others {
+    Taste::FunctionName => "vizkit3d_BodyState";
+  };
+  on_board_control : PROCESS deploymentview::DV::cots_linux_obc::on_board_control.others {
+    Taste::coordinates => "145766 53806 175800 80968";
+    Deployment::Port_Number => 0;
+  };
+  x86_linux : PROCESSOR ocarina_processors_x86::x86.linux {
+    Taste::coordinates => "142012 46045 179554 84848";
+  };
+  generic_sockets_ip_pohic : DEVICE deploymentview::DV::cots_linux_obc::generic_sockets_ip_pohic.others {
+    Taste::coordinates => "142043 87714 179365 98108";
+  };
+CONNECTIONS
+  generic_sockets_ip_pohic_ip_i_link : BUS ACCESS generic_sockets_ip_pohic_ip_i -> generic_sockets_ip_pohic.link;
+PROPERTIES
+  Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_vizkit3d_BodyState;
+  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO on_board_control;
+  Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
+END cots_linux_obc.others;
 
 SYSTEM deploymentview
 END deploymentview;
 
 SYSTEM IMPLEMENTATION deploymentview.others
 SUBCOMPONENTS
-  Node1 : SYSTEM Node1.others {
-    Taste::coordinates => "33125 41959 238994 186729";
+  remote_control_pc : SYSTEM remote_control_pc.others {
+    Taste::coordinates => "85038 41259 130863 102832";
+  };
+  cots_linux_obc : SYSTEM cots_linux_obc.others {
+    Taste::coordinates => "137634 41416 184562 101730";
+  };
+  ip_i : BUS ocarina_buses::ip.i {
+    Taste::coordinates => "115461 118233 212061 144374";
   };
   interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
+CONNECTIONS
+  Connection2 : BUS ACCESS ip_i -> remote_control_pc.generic_sockets_ip_pohic_ip_i {
+    Taste::coordinates => "105667 98686 105667 131304 115461 131304";
+  };
+  Connection3 : BUS ACCESS ip_i -> cots_linux_obc.generic_sockets_ip_pohic_ip_i {
+    Taste::coordinates => "160310 98108 160310 108170 160033 108170 160033 118233";
+  };
 END deploymentview.others;
 
 PROPERTIES
