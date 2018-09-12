@@ -26,7 +26,7 @@ FEATURES
     Taste::coordinates => "105667 98686";
   };
 PROPERTIES
-  Taste::Interface_Coordinates => "115461 131304" APPLIES TO link;
+  Taste::Interface_Coordinates => "115461 131461" APPLIES TO link;
   Deployment::Help => "Write your ASN.1 configuration here";
   Deployment::Configuration => "{devname ""enp0s3"", address ""192.168.0.56"", port 5116}";
   Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
@@ -60,7 +60,7 @@ FEATURES
     Taste::coordinates => "160310 98108";
   };
 PROPERTIES
-  Taste::Interface_Coordinates => "160033 118233" APPLIES TO link;
+  Taste::Interface_Coordinates => "212061 131933" APPLIES TO link;
   Deployment::Help => "Write your ASN.1 configuration here";
   Deployment::Configuration => "{devname ""enp0s3"", address ""192.168.0.9"", port 5116}";
   Deployment::Config => "/home/taste/tool-inst/include/ocarina/runtime/polyorb-hi-c/src/drivers/configuration/ip.asn";
@@ -80,7 +80,7 @@ WITH interfaceview::IV::kb_teleop;
 WITH interfaceview::IV::odometry;
 WITH ocarina_processors_x86;
 WITH deploymentview::DV::remote_control_pc;
-WITH interfaceview::IV::vizkit3d_BodyState;
+WITH interfaceview::IV::vizkit3d_RigidBodyState;
 WITH deploymentview::DV::cots_linux_obc;
 WITH ocarina_buses;
 WITH Taste;
@@ -126,8 +126,8 @@ END cots_linux_obc;
 
 SYSTEM IMPLEMENTATION cots_linux_obc.others
 SUBCOMPONENTS
-  IV_vizkit3d_BodyState : SYSTEM interfaceview::IV::vizkit3d_BodyState::vizkit3d_BodyState.others {
-    Taste::FunctionName => "vizkit3d_BodyState";
+  IV_vizkit3d_RigidBodyState : SYSTEM interfaceview::IV::vizkit3d_RigidBodyState::vizkit3d_RigidBodyState.others {
+    Taste::FunctionName => "vizkit3d_RigidBodyState";
   };
   on_board_control : PROCESS deploymentview::DV::cots_linux_obc::on_board_control.others {
     Taste::coordinates => "145766 53806 175800 80968";
@@ -142,7 +142,7 @@ SUBCOMPONENTS
 CONNECTIONS
   generic_sockets_ip_pohic_ip_i_link : BUS ACCESS generic_sockets_ip_pohic_ip_i -> generic_sockets_ip_pohic.link;
 PROPERTIES
-  Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_vizkit3d_BodyState;
+  Taste::APLC_Binding => (reference (on_board_control)) APPLIES TO IV_vizkit3d_RigidBodyState;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO on_board_control;
   Actual_Processor_Binding => (reference (x86_linux)) APPLIES TO generic_sockets_ip_pohic;
 END cots_linux_obc.others;
@@ -159,16 +159,18 @@ SUBCOMPONENTS
     Taste::coordinates => "137634 41416 184562 101730";
   };
   ip_i : BUS ocarina_buses::ip.i {
-    Taste::coordinates => "115461 118233 212061 144374";
+    Taste::coordinates => "115461 118390 212061 144531";
   };
   interfaceview : SYSTEM interfaceview::IV::interfaceview.others;
 CONNECTIONS
   Connection2 : BUS ACCESS ip_i -> remote_control_pc.generic_sockets_ip_pohic_ip_i {
-    Taste::coordinates => "105667 98686 105667 131304 115461 131304";
+    Taste::coordinates => "105667 98686 105667 131461 115461 131461";
   };
   Connection3 : BUS ACCESS ip_i -> cots_linux_obc.generic_sockets_ip_pohic_ip_i {
-    Taste::coordinates => "160310 98108 160310 108170 160033 108170 160033 118233";
+    Taste::coordinates => "160310 98108 160310 103774 215204 103774 215204 131933 212061 131933";
   };
+PROPERTIES
+  Actual_Connection_Binding => (reference (ip_i)) APPLIES TO interfaceview.vizkit3d_RigidBodyState_PI_updateRigidBodyState_odometry_RI_updateRigidBodyState;
 END deploymentview.others;
 
 PROPERTIES

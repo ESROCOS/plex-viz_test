@@ -61,7 +61,7 @@ END interfaceview::IV::kb_teleop;
 PACKAGE interfaceview::IV::odometry
 PUBLIC
 
-WITH interfaceview::IV::vizkit3d_BodyState;
+WITH interfaceview::IV::vizkit3d_RigidBodyState;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -79,29 +79,29 @@ PROPERTIES
   Compute_Execution_Time => 0 ms .. 100 ms;
 END PI_mc_in.others;
 
-SUBPROGRAM RI_updateBodyState
+SUBPROGRAM RI_updateRigidBodyState
 FEATURES
-  bodystate : IN PARAMETER DataView::Base_samples_BodyState {
+  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
     Taste::encoding => NATIVE;
   };
-END RI_updateBodyState;
+END RI_updateRigidBodyState;
 
-SUBPROGRAM IMPLEMENTATION RI_updateBodyState.others
-END RI_updateBodyState.others;
+SUBPROGRAM IMPLEMENTATION RI_updateRigidBodyState.others
+END RI_updateRigidBodyState.others;
 
 SYSTEM odometry
 FEATURES
   PI_mc_in : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::odometry::PI_mc_in.others {
-    Taste::coordinates => "97079 87444";
+    Taste::coordinates => "97319 80483";
     Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 100 ms;
     Taste::Deadline => 100 ms;
     Taste::InterfaceName => "mc_in";
   };
-  RI_updateBodyState : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::vizkit3d_BodyState::PI_updateBodyState.others {
-    Taste::coordinates => "163405 91149";
+  RI_updateRigidBodyState : REQUIRES SUBPROGRAM ACCESS interfaceview::IV::vizkit3d_RigidBodyState::PI_updateRigidBodyState.others {
+    Taste::coordinates => "163645 84188";
     Taste::RCMoperationKind => any;
-    Taste::InterfaceName => "updateBodyState";
+    Taste::InterfaceName => "updateRigidBodyState";
     Taste::labelInheritance => "true";
   };
 PROPERTIES
@@ -118,62 +118,61 @@ END odometry.others;
 
 END interfaceview::IV::odometry;
 
-PACKAGE interfaceview::IV::vizkit3d_BodyState
+PACKAGE interfaceview::IV::vizkit3d_RigidBodyState
 PUBLIC
 
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
-SUBPROGRAM PI_updateBodyState
+SUBPROGRAM PI_updateRigidBodyState
 FEATURES
-  bodystate : IN PARAMETER DataView::Base_samples_BodyState {
+  rbstate : IN PARAMETER DataView::Base_samples_RigidBodyState {
     Taste::encoding => NATIVE;
   };
 PROPERTIES
   Taste::Associated_Queue_Size => 1;
-END PI_updateBodyState;
+END PI_updateRigidBodyState;
 
-SUBPROGRAM IMPLEMENTATION PI_updateBodyState.others
+SUBPROGRAM IMPLEMENTATION PI_updateRigidBodyState.others
 PROPERTIES
   Compute_Execution_Time => 0 ms .. 0 ms;
-END PI_updateBodyState.others;
+END PI_updateRigidBodyState.others;
 
-SYSTEM vizkit3d_BodyState
+SYSTEM vizkit3d_RigidBodyState
 FEATURES
-  PI_updateBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::vizkit3d_BodyState::PI_updateBodyState.others {
-    Taste::coordinates => "201763 83048";
-    Taste::RCMoperationKind => unprotected;
+  PI_updateRigidBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::vizkit3d_RigidBodyState::PI_updateRigidBodyState.others {
+    Taste::coordinates => "199365 97479";
+    Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
-    Taste::InterfaceName => "updateBodyState";
+    Taste::InterfaceName => "updateRigidBodyState";
   };
 PROPERTIES
   Source_Language => (CPP);
   Taste::Active_Interfaces => enabled;
-  Source_Text => ("/root/esrocos_workspace/install/share/taste_components/vizkit3d_bodystate_widgets/vizkit3d_bodystate.zip");
-END vizkit3d_BodyState;
+END vizkit3d_RigidBodyState;
 
-SYSTEM IMPLEMENTATION vizkit3d_BodyState.others
+SYSTEM IMPLEMENTATION vizkit3d_RigidBodyState.others
 SUBCOMPONENTS
   configFile : DATA DataView::Vizkit3D_FilePath {
     Taste::FS_Default_Value => """config-bodystate.yml""";
   };
   id : DATA DataView::Vizkit3D_PluginLabel {
-    Taste::FS_Default_Value => """BS""";
+    Taste::FS_Default_Value => """RBS""";
   };
   compilerOption : DATA DataView::Taste_directive {
     Taste::FS_Default_Value => "compiler-option:""-DOROCOS_TARGET=gnulinux""";
   };
-END vizkit3d_BodyState.others;
+END vizkit3d_RigidBodyState.others;
 
-END interfaceview::IV::vizkit3d_BodyState;
+END interfaceview::IV::vizkit3d_RigidBodyState;
 
 PACKAGE interfaceview::IV
 PUBLIC
 
 WITH interfaceview::IV::kb_teleop;
 WITH interfaceview::IV::odometry;
-WITH interfaceview::IV::vizkit3d_BodyState;
+WITH interfaceview::IV::vizkit3d_RigidBodyState;
 WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
@@ -189,17 +188,20 @@ SUBCOMPONENTS
     Taste::coordinates => "8893 68919 59577 134874";
   };
   odometry : SYSTEM interfaceview::IV::odometry::odometry.others {
-    Taste::coordinates => "97079 72624 163405 140802";
+    Taste::coordinates => "97319 65663 163645 133841";
   };
-  vizkit3d_BodyState : SYSTEM interfaceview::IV::vizkit3d_BodyState::vizkit3d_BodyState.others {
-    Taste::coordinates => "201763 53784 287000 95215";
+-- [ interfaceview::IV::interfaceview.others.vizkit3d_RigidBodyState - text 
+--vizkit3d plugin RigidBodyStateVisualization. 
+--]
+  vizkit3d_RigidBodyState : SYSTEM interfaceview::IV::vizkit3d_RigidBodyState::vizkit3d_RigidBodyState.others {
+    Taste::coordinates => "199365 92754 233852 125981";
   };
 CONNECTIONS
   odometry_PI_mc_in_kb_teleop_RI_mc_out : SUBPROGRAM ACCESS odometry.PI_mc_in -> kb_teleop.RI_mc_out {
-    Taste::coordinates => "59577 87444 79810 87444 79810 87444 97079 87444";
+    Taste::coordinates => "59577 87444 79810 87444 79810 80483 97319 80483";
   };
-  vizkit3d_BodyState_PI_updateBodyState_odometry_RI_updateBodyState : SUBPROGRAM ACCESS vizkit3d_BodyState.PI_updateBodyState -> odometry.RI_updateBodyState {
-    Taste::coordinates => "163405 91149 182584 91149 182584 83048 201763 83048";
+  vizkit3d_RigidBodyState_PI_updateRigidBodyState_odometry_RI_updateRigidBodyState : SUBPROGRAM ACCESS vizkit3d_RigidBodyState.PI_updateRigidBodyState -> odometry.RI_updateRigidBodyState {
+    Taste::coordinates => "163645 84188 181385 84188 181385 97479 199365 97479";
   };
 END interfaceview.others;
 

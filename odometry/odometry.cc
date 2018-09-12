@@ -1,17 +1,17 @@
 /* User code: This file will not be overwritten by TASTE. */
 
 #include "odometry.h"
-#include "base_support/Base-samples-BodyStateConvert.hpp"
+#include "base_support/Base-samples-RigidBodyStateConvert.hpp"
 #include <base_support/Base-commands-Motion2DConvert.hpp>
 #include "base_support/OpaqueConversion.hpp"
 #include <cmath>
 
-asn1SccBase_samples_BodyState bs;
+asn1SccBase_samples_RigidBodyState bs;
 
 void odometry_startup()
 {
    base::Vector3d translation(1.0, 0.0, 0.0);
-   asn1Scc_Vector3d_toAsn1(bs.pose.translation, translation);
+   asn1Scc_Vector3d_toAsn1(bs.position, translation);
 }
 
 void odometry_PI_mc_in(const asn1SccBase_commands_Motion2D *IN_in_mc)
@@ -23,8 +23,8 @@ void odometry_PI_mc_in(const asn1SccBase_commands_Motion2D *IN_in_mc)
   asn1SccBase_commands_Motion2D_fromAsn1(base_mc, *IN_in_mc);
  
   // get current values
-  asn1Scc_Vector3d_fromAsn1(translation, bs.pose.translation);
-  asn1Scc_Quaterniond_fromAsn1(orientation, bs.pose.orientation);
+  asn1Scc_Vector3d_fromAsn1(translation, bs.position);
+  asn1Scc_Quaterniond_fromAsn1(orientation, bs.orientation);
   
   float f_orientation = base::getYaw(orientation); 
   float x = translation[0]; 
@@ -42,8 +42,8 @@ void odometry_PI_mc_in(const asn1SccBase_commands_Motion2D *IN_in_mc)
   base::Quaterniond orientation_(base::AngleAxisd(f_orientation_, base::Vector3d::UnitZ()));
 
   // new Body state
-  asn1Scc_Vector3d_toAsn1(bs.pose.translation, translation_);
-  asn1Scc_Quaterniond_toAsn1(bs.pose.orientation, orientation_);
-  odometry_RI_updateBodyState(&bs);
+  asn1Scc_Vector3d_toAsn1(bs.position, translation_);
+  asn1Scc_Quaterniond_toAsn1(bs.orientation, orientation_);
+  odometry_RI_updateRigidBodyState(&bs);
 }
 

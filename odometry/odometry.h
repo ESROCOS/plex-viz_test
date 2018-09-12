@@ -15,7 +15,7 @@ void odometry_startup();
 
 void odometry_PI_mc_in(const asn1SccBase_commands_Motion2D *);
 
-extern void odometry_RI_updateBodyState(const asn1SccBase_samples_BodyState *);
+extern void odometry_RI_updateRigidBodyState(const asn1SccBase_samples_RigidBodyState *);
 
 #ifdef __cplusplus
 }
