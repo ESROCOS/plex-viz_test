@@ -31,9 +31,11 @@ esrocos_init()
 ########### FOR INTEGRATION PROJECTS ##############
 
 #uncomment if you want to add dependencies for the build process (only required in integration projects)
-esrocos_add_dependency(PARTITION x86_partition
+esrocos_add_dependency(PARTITION x86_partition_1
                        MODULES   ncurses eigen3 base_support base-types)
 
+esrocos_add_dependency(PARTITION x86_partition_2
+                       MODULES   ncurses eigen3 base_support base-types)
 ########### FOR COMPONENT PROJECTS ################
 
 #uncomment if you want to export a function
