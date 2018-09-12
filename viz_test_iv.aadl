@@ -141,7 +141,7 @@ END PI_updateRigidBodyState.others;
 SYSTEM vizkit3d_RigidBodyState
 FEATURES
   PI_updateRigidBodyState : PROVIDES SUBPROGRAM ACCESS interfaceview::IV::vizkit3d_RigidBodyState::PI_updateRigidBodyState.others {
-    Taste::coordinates => "199365 97479";
+    Taste::coordinates => "199208 97479";
     Taste::RCMoperationKind => sporadic;
     Taste::RCMperiod => 0 ms;
     Taste::Deadline => 0 ms;
@@ -150,6 +150,7 @@ FEATURES
 PROPERTIES
   Source_Language => (CPP);
   Taste::Active_Interfaces => enabled;
+  Source_Text => ("/root/esrocos_workspace/install/share/taste_components/vizkit3d_bodystate_widgets/vizkit3d_rigidbodystate.zip");
 END vizkit3d_RigidBodyState;
 
 SYSTEM IMPLEMENTATION vizkit3d_RigidBodyState.others
@@ -194,14 +195,14 @@ SUBCOMPONENTS
 --vizkit3d plugin RigidBodyStateVisualization. 
 --]
   vizkit3d_RigidBodyState : SYSTEM interfaceview::IV::vizkit3d_RigidBodyState::vizkit3d_RigidBodyState.others {
-    Taste::coordinates => "199365 92754 233852 125981";
+    Taste::coordinates => "199208 92754 233695 125981";
   };
 CONNECTIONS
   odometry_PI_mc_in_kb_teleop_RI_mc_out : SUBPROGRAM ACCESS odometry.PI_mc_in -> kb_teleop.RI_mc_out {
     Taste::coordinates => "59577 87444 79810 87444 79810 80483 97319 80483";
   };
   vizkit3d_RigidBodyState_PI_updateRigidBodyState_odometry_RI_updateRigidBodyState : SUBPROGRAM ACCESS vizkit3d_RigidBodyState.PI_updateRigidBodyState -> odometry.RI_updateRigidBodyState {
-    Taste::coordinates => "163645 84188 181385 84188 181385 97479 199365 97479";
+    Taste::coordinates => "163645 84188 181385 84188 181385 97479 199208 97479";
   };
 END interfaceview.others;
 
