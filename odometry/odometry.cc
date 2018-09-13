@@ -4,13 +4,28 @@
 #include "base_support/Base-samples-RigidBodyStateConvert.hpp"
 #include <base_support/Base-commands-Motion2DConvert.hpp>
 #include "base_support/OpaqueConversion.hpp"
+#include <cstring>
 #include <cmath>
 
 asn1SccBase_samples_RigidBodyState bs;
 
+void init_rbs(asn1SccBase_samples_RigidBodyState *rbs)
+{
+   memset(rbs, 0, sizeof(asn1SccBase_samples_RigidBodyState));
+   rbs->position.data.nCount = 3;
+   rbs->cov_position.data.nCount = 9;
+   rbs->orientation.im.nCount = 3;
+   rbs->cov_orientation.data.nCount = 9;
+   rbs->velocity.data.nCount = 3;
+   rbs->cov_velocity.data.nCount = 9;
+   rbs->angular_velocity.data.nCount = 3;
+   rbs->cov_angular_velocity.data.nCount = 9;
+}
+
 void odometry_startup()
 {
    base::Vector3d translation(1.0, 0.0, 0.0);
+   init_rbs(&bs);
    asn1Scc_Vector3d_toAsn1(bs.position, translation);
 }
 
